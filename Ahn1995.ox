@@ -2,9 +2,6 @@
 
 /** Need to specify the Reachable and  Utility functions**/
 
-Ahn::Reachable(){
-	return new Ahn();
-}
 
 Ahn::Utility()  {
 // eqn(12) with a substition for x_k ( from eqn(2) )?
@@ -15,7 +12,7 @@ Ahn::Utility()  {
 **/	
 Ahn::Run(){
 	
-	Initialize(Reachable);
+	Initialize(pho,Reachable);
 	SetClock(NormalAging,T);
 	SetDelta(0.95);   // matches delta in eqn(12)
 	Actions(d = new BinaryChoice());
@@ -29,6 +26,10 @@ Ahn::FeasibleActions(Alpha) {
 
 return 1|(I::t<tau) ; // Fertile for the first tau periods.
 
+}
+
+Ahn::Reachable(){
+	return (I::t<T) ? new Ahn() : FALSE;
 }
 
 Ahn::ItsABoy(A) {
