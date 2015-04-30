@@ -5,7 +5,7 @@
 
 Ahn::Utility()  {
 // eqn(12) with a substition for x_k ( from eqn(2) )?
-	return Y + nb.v + (-.8)*(sumr(d)-nb.v);	   //temporary
+	return Y + nb.v ;	   //temporary
 	}
 
 /** Setup and solve the model.
@@ -15,11 +15,13 @@ Ahn::Run(){
 	Initialize(pho,Reachable);
 	SetClock(NormalAging,T);
 	SetDelta(0.95);   // matches delta in eqn(12)
-	Actions(d = new BinaryChoice());
- 	EndogenousStates(nb = new RandomUpDown("nb",7,ItsABoy));
+	Actions(d = new BinaryChoice()); // d=1 to have a child
+	EndogenousStates(nc= new ActionAccumulator("nc",T,d)); // added total number of childs
+ 	EndogenousStates(nb = new RandomUpDown("nb",7,ItsABoy)); // number of boys
+	
 	CreateSpaces();
 	EMax = new ValueIteration(0);
-	
+	EMax->Solve();	
     }
 
 Ahn::FeasibleActions(Alpha) { 
