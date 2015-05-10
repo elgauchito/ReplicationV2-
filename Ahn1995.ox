@@ -5,7 +5,18 @@
 
 Ahn::Utility()  {
 // eqn(12) with a substition for x_k ( from eqn(2) )?
-	return Y[I::t] + nb.v ;	   //temporary
+	decl val_ind, u;
+	if (I::t<13) { val_ind=0;}
+	else if (I::t<18) { val_ind=1;}
+	else if (I::t<22) { val_ind=2;}
+	else {val_ind=3;};
+	//print(nc.v);
+	//print(" kids ", nc.v);
+	//print(" b ",nb.v);
+
+	u=Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind];
+	//print(" u ", u);
+	return u;	  
 	}
 
 /** Setup and solve the model.
@@ -14,29 +25,36 @@ Ahn::Run(){
 	
 	Initialize(pho,Reachable);
 	SetClock(NormalAging,T);
-	SetDelta(0.95);   // matches delta in eqn(12)
+	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
-	EndogenousStates(nc= new ActionCounter("nc",7,d)); // added total number of childs
- 	EndogenousStates(nb = new RandomUpDown("nb",7,ItsABoy)); // number of boys
+	//EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of childs
+ 	EndogenousStates(nb = new RandomUpDown("nc",tau+1,ItsABirth));
+	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
 	CreateSpaces();
-	EMax = new ValueIteration(0);
-	//EMax->Solve();
-	//println(sizec(Y));	
+	EMax = new ValueIteration();
+	EMax.vtoler = 1E-1; 
+	EMax->Solve();
     }
 
 Ahn::FeasibleActions(Alpha) { 
 
-return 1|(I::t<tau) ; // Fertile for the first tau periods.
+return 1|(I::t<tau+1) ; // Fertile for the first tau periods.
 
 }
 
 Ahn::Reachable(){
-	return (I::t<T) ? new Ahn() : FALSE;
+	return (I::t<T+1)  ? new Ahn() : FALSE;
 }
 
 Ahn::ItsABoy(A) {
 	decl birth = A[][d.pos];
 	return  0  ~ (1-birth)+birth*(1-BoyRatio) ~ birth*BoyRatio;
+
+}
+
+Ahn::ItsABirth(A) {
+	decl birth = A[][d.pos];
+	return  0  ~ 0 ~ 1;
 
 }
