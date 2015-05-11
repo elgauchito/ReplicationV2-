@@ -1,4 +1,5 @@
-#import "niqlow"
+#import "DDP"
+
 
 enum{T=25,tau=7};  /** State space dimensions. @names dimens **/
 
