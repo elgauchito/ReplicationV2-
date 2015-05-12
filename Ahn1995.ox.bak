@@ -14,7 +14,7 @@ Ahn::Utility()  {
 	//print(" kids ", nc.v);
 	//print(" b ",nb.v);
 
-	u=Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind];
+	u=(Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind]) + 675.0;
 	//print(" u ", u);
 	return log(u);	  
 	//return setbounds(log(u), 1.0, +.Inf);	
@@ -28,13 +28,14 @@ Ahn::Run(){
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
-	EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of childs;
+	EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of kids;
 	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
 	CreateSpaces();
 	EMax = new ValueIteration();
 	EMax.vtoler = 1E-1; 
 	EMax->Solve();
+	EMax.Volume = NOISY;
     }
 
 Ahn::FeasibleActions(Alpha) { 
@@ -44,7 +45,8 @@ return 1|(I::t<tau) ;  // DR: change <tau+1> to <tau>?  (Fertile for the first t
 }
 
 Ahn::Reachable(){
-	CV(nc) >= CV(nb);
+	 CV(nc) <= tau;
+	 CV(nc) >= CV(nb);
 	return new Ahn();
 }
 

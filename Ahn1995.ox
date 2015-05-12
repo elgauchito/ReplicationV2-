@@ -14,7 +14,7 @@ Ahn::Utility()  {
 	//print(" kids ", nc.v);
 	//print(" b ",nb.v);
 
-	u=Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind];
+	u=(Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind]) + 300.0;
 	//print(" u ", u);
 	return log(u);	  
 	//return setbounds(log(u), 1.0, +.Inf);	
@@ -35,6 +35,7 @@ Ahn::Run(){
 	EMax = new ValueIteration();
 	EMax.vtoler = 1E-1; 
 	EMax->Solve();
+	EMax.Volume = NOISY;   // trying to get that step-by-step info
     }
 
 Ahn::FeasibleActions(Alpha) { 
@@ -44,7 +45,8 @@ return 1|(I::t<tau) ;  // DR: change <tau+1> to <tau>?  (Fertile for the first t
 }
 
 Ahn::Reachable(){
-	CV(nc) >= CV(nb);
+	 CV(nc) <= tau;
+	 CV(nc) >= CV(nb);
 	return new Ahn();
 }
 
