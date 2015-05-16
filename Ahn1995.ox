@@ -5,19 +5,44 @@
 
 Ahn::Utility()  {
 // eqn(12) with a substition for x_k ( from eqn(2) )?
-	decl val_ind, u;
-	if (I::t<13) { val_ind=0;}
-	else if (I::t<18) { val_ind=1;}
-	else if (I::t<22) { val_ind=2;}
-	else {val_ind=3;};
-	//print(nc.v);
-	//print(" kids ", nc.v);
-	//print(" b ",nb.v);
+	decl u=0,j, nc=0, ind=zeros(1,7), div, bg=0, age ;
+	if (I::t<7){ // caluclate total number of childs, and age index of the child
+		for(j=0;j<I::t+1;++j) nc=nc+CV(dvals[j]);
+		if (I::t > 4) {ind[0]=1;}
+		if (I::t > 5){ ind[0]=1,ind[1]=1;}	
+	
+	}
+	else {
+		for(j=0;j<7;++j) {
+			nc=nc+CV(dvals[j]);
+			age=(I::t-j)*2;
+			div=idiv(age,10); // integer division to get the index
+		 	if (div >2 ) div=3;
+			ind[j]=div;	
+		}
+	}
 
-	u=(Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind])+300;
-	//print(" u ", u);
-	u=max(u,1);
-	return log(u);	  
+	if(nc>0){ // calculate boys girls ratio
+	bg=CV(nb)/nc;
+	}
+	
+	// calculate utility
+	if (I::t<7){
+		for(j=0;j<I::t+1;++j) {
+			decl index=ind[j];
+			u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);	
+			}
+	}
+	else {
+			for(j=0;j<7;++j) {
+			decl index=ind[j];
+			u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);
+			}	
+	}
+
+//	println("dvals",CV(dvals[0]), "nc",nc,"u", u, "bg", bg);
+	u=u/100;
+	return u;	  
 }
 
 /** Setup and solve the model.
@@ -28,26 +53,31 @@ Ahn::Run(){
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
-	EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of kids;
+	dvals = new array[7];
+	for(i=0;i<7;++i) dvals[i] = new ChoiceAtTbar("d"+sprint(i),d,DP::counter,i);
+ 	EndogenousStates(dvals);
+
+	//EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of kids;
 	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
 	CreateSpaces();
         DPDebug::outAllV();
 	EMax = new ValueIteration();
-	EMax.vtoler = 1E-1; 
+	//EMax.vtoler = 1E-1; 
 	EMax->Solve();
 	//EMax.Volume = NOISY;   // trying to get that step-by-step info
     }
 
 Ahn::FeasibleActions(Alpha) { 
 
-	return 1|(I::t<tau) ;  // DR: change <tau+1> to <tau>?  (Fertile for the first tau periods.)
-
+	return 1|(I::t<tau) ;   
 }
 
 Ahn::Reachable(){
+	decl nc=0,j;
+	for(j=0;j<7;++j) nc=nc+CV(dvals[j]);
 
-	if (CV(nb) > CV(nc)) return 0;
+	if (CV(nb) > nc) return 0;
 	return new Ahn();
 }
 
