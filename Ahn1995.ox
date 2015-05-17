@@ -5,15 +5,18 @@
 
 Ahn::Utility()  {
 // eqn(12) with a substition for x_k ( from eqn(2) )?
-	decl u=0,j, nc=0, ind=zeros(1,7), div, bg=0, age ;
+	decl u=0,j , nc=0, ind=zeros(1,7), div, bg=0, age, bound=0 ;
+
+	bound=min(7,I::t+1);
+	
 	if (I::t<7){ // caluclate total number of childs, and age index of the child
-		for(j=0;j<I::t+1;++j) nc=nc+CV(dvals[j]);
+		for(j=0;j<bound;++j) nc=nc+CV(dvals[j]);
 		if (I::t > 4) {ind[0]=1;}
 		if (I::t > 5){ ind[0]=1,ind[1]=1;}	
 	
 	}
 	else {
-		for(j=0;j<7;++j) {
+		for(j=0;j<bound;++j) {
 			nc=nc+CV(dvals[j]);
 			age=(I::t-j)*2;
 			div=idiv(age,10); // integer division to get the index
@@ -27,18 +30,10 @@ Ahn::Utility()  {
 	}
 	
 	// calculate utility
-	if (I::t<7){
-		for(j=0;j<I::t+1;++j) {
-			decl index=ind[j];
-			u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);	
-			}
-	}
-	else {
-			for(j=0;j<7;++j) {
-			decl index=ind[j];
-			u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);
-			}	
-	}
+	for(j=0;j<bound;++j) {
+		decl index=ind[j];
+		u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);
+		}	
 
 //	println("dvals",CV(dvals[0]), "nc",nc,"u", u, "bg", bg);
 	u=u/100;
