@@ -14,10 +14,10 @@ Ahn::Utility()  {
 	//print(" kids ", nc.v);
 	//print(" b ",nb.v);
 
-	u=(Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind])+300;
+	u=(Y[I::t] +CV(nb)*ValBoy[val_ind]+(CV(nc)-CV(nb))*ValGirl[val_ind]) + 675.0;
 	//print(" u ", u);
-	u=max(u,1);
 	return log(u);	  
+	//return setbounds(log(u), 1.0, +.Inf);	
 }
 
 /** Setup and solve the model.
@@ -32,22 +32,21 @@ Ahn::Run(){
 	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
 	CreateSpaces();
-    //DPDebug::outAutoVars();
 	EMax = new ValueIteration();
 	EMax.vtoler = 1E-1; 
 	EMax->Solve();
-	EMax.Volume = NOISY;   // trying to get that step-by-step info
+	EMax.Volume = NOISY;
     }
 
 Ahn::FeasibleActions(Alpha) { 
 
-	return 1|(I::t<tau) ;  // DR: change <tau+1> to <tau>?  (Fertile for the first tau periods.)
+return 1|(I::t<tau) ;  // DR: change <tau+1> to <tau>?  (Fertile for the first tau periods.)
 
 }
 
 Ahn::Reachable(){
-
-	if (CV(nb) > CV(nc)) return 0;
+	 CV(nc) <= tau;
+	 CV(nc) >= CV(nb);
 	return new Ahn();
 }
 
