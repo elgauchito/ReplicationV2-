@@ -56,11 +56,11 @@ Ahn::Run(){
 	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
 	CreateSpaces();
-        DPDebug::outAllV();
+    DPDebug::outAllV();
 	EMax = new ValueIteration();
 	//EMax.vtoler = 1E-1; 
 	EMax->Solve();
-	//EMax.Volume = NOISY;   // trying to get that step-by-step info
+	EMax.Volume = NOISY;   // trying to get that step-by-step info
     }
 
 Ahn::FeasibleActions(Alpha) { 
