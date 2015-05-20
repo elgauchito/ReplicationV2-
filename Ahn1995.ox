@@ -36,7 +36,8 @@ Ahn::Utility()  {
 		}	
 
 //	println("dvals",CV(dvals[0]), "nc",nc,"u", u, "bg", bg);
-	u=u/100;
+	 u= log((u +Y[I::t]) - 430);  //trying out log utility , with the additive term we get to t=24 ... 
+	//u= u +Y[I::t];
 	return u;	  
 }
 
@@ -65,7 +66,7 @@ Ahn::Run(){
 
 Ahn::FeasibleActions(Alpha) { 
 
-	return 1|(I::t<tau) ;   
+	return 1|(I::t<tau+1) ;   
 }
 
 Ahn::Reachable(){
