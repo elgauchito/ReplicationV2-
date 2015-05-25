@@ -35,16 +35,19 @@ Ahn::Utility()  {
 		u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);
 		}	
 
-//	println("dvals",CV(dvals[0]), "nc",nc,"u", u, "bg", bg);
-	 u= log((u +Y[I::t]) + 450);  //trying out log utility , with the additive term we get to t=24 ... 
-	//u= u +Y[I::t];
+	//u= log(max(1,u+Y[I::t]));
+	u=(u)/100;
+	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
+	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb),"t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
+
 }
 
 /** Setup and solve the model.
 **/	
 Ahn::Run(){
-	
+
+ 	decl mat,PD;	
 	Initialize(pho,Reachable);
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
@@ -57,11 +60,20 @@ Ahn::Run(){
 	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
 	CreateSpaces();
-        DPDebug::outAllV();
+       	DPDebug::outAllV(FALSE,&mat);
 	EMax = new ValueIteration();
 	//EMax.vtoler = 1E-1; 
 	EMax->Solve();
-	//EMax.Volume = NOISY;   // trying to get that step-by-step info
+	EMax.Volume = NOISY;   // trying to get that step-by-step info
+	savemat("v.dta",mat,DPDebug::SVlabels);
+	PD = new PanelPrediction(15);
+        PD -> Tracking(d,dvals[1]);
+        PD -> Predict(8);
+        PD -> Histogram(One);
+       // println("%c",PD.tlabels,PD.flat[0]);
+
+
+
     }
 
 Ahn::FeasibleActions(Alpha) { 
