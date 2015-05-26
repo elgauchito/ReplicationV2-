@@ -4,7 +4,7 @@
 
 
 Ahn::Utility()  {
-// eqn(12) with a substition for x_k ( from eqn(2) )?
+	
 	decl u=0,j , nc=0, ind=zeros(1,7), div, bg=0, age, bound=0 ;
 
 	bound=min(7,I::t+1);
@@ -28,7 +28,7 @@ Ahn::Utility()  {
 	if(nc>0){ // calculate boys girls ratio
 	bg=CV(nb)/nc;
 	}
-	//bg=.5;	
+	bg=1; // Set bg=1 to set boy and girls value the same.	
 	// calculate utility
 	for(j=0;j<bound;++j) {
 		decl index=ind[j];
@@ -36,7 +36,7 @@ Ahn::Utility()  {
 		}	
 
 	u= log(max(1,u+Y[I::t]));
-//	u=(u)/100;
+	
 	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
 	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb),"t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
@@ -48,7 +48,7 @@ Ahn::Utility()  {
 Ahn::Run(){
 
  	decl mat,PD;	
-	Initialize(7.5,Reachable);
+	Initialize(pho,Reachable);
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
