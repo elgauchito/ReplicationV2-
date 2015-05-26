@@ -6,7 +6,7 @@ enum{T=25,tau=7};  /** State space dimensions. @names dimens **/
 struct Ahn : ExtremeValue {
 	
 	static decl d, nc, nb, nbp, dvals, EMax, i;	  // list action variables, state variables, other things.
-	static const decl BoyRatio = 0.501, delt=0.95, pho=1;   // ratio of births that are boys
+	static const decl BoyRatio = 0.51, delt=0.95, pho=1;   // ratio of births that are boys
 	static decl Noff, p ; // placeholders for variables that maynot be needed
 	static const decl
 		/* estimated parameters from Table 5*/ pars ; 
@@ -14,7 +14,6 @@ struct Ahn : ExtremeValue {
 	static const decl ValBoy=<49.33,-45.61,-196.5,131.7>; // values of boys in the 4 age brackets
 	static const decl ValGirl=<50.35,-33.96,-56.37,4.77>;	
 	static ItsABoy(A);	
-	static ItsABirth(A);	
 	
         static Run();	
 	static Reachable();	    // Static methods can be called anything.		
