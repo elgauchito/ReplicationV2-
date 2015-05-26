@@ -35,8 +35,8 @@ Ahn::Utility()  {
 		u=u+CV(dvals[j])*(bg*ValBoy[index]+(1-bg)*ValGirl[index]);
 		}	
 
-	//u= log(max(1,u+Y[I::t]));
-	u=(u)/100;
+	u= log(max(1,u+Y[I::t]));
+//	u=(u)/100;
 	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
 	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb),"t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
@@ -48,12 +48,12 @@ Ahn::Utility()  {
 Ahn::Run(){
 
  	decl mat,PD;	
-	Initialize(pho,Reachable);
+	Initialize(7.5,Reachable);
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
 	dvals = new array[7];
-	for(i=0;i<7;++i) dvals[i] = new ChoiceAtTbar("d"+sprint(i),d,DP::counter,i);
+	for(i=0;i<7;++i) dvals[i] = new ChoiceAtTbar("d"+sprint(i),d,i);
  	EndogenousStates(dvals);
 
 	//EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of kids;
@@ -67,8 +67,8 @@ Ahn::Run(){
 	EMax.Volume = NOISY;   // trying to get that step-by-step info
 	savemat("v.dta",mat,DPDebug::SVlabels);
 	PD = new PanelPrediction(15);
-        PD -> Tracking(d,dvals[1]);
-        PD -> Predict(8);
+        PD -> Tracking(NotInData,d,dvals[1]);
+        PD -> Predict(6);
         PD -> Histogram(One);
        // println("%c",PD.tlabels,PD.flat[0]);
 
@@ -78,7 +78,7 @@ Ahn::Run(){
 
 Ahn::FeasibleActions(Alpha) { 
 
-	return 1|(I::t<tau+1) ;   
+	return 1|(I::t<tau) ;   
 }
 
 Ahn::Reachable(){
