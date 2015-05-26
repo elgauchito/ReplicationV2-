@@ -52,12 +52,11 @@ Ahn::Run(){
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
+	
 	dvals = new array[7];
 	for(i=0;i<7;++i) dvals[i] = new ChoiceAtTbar("d"+sprint(i),d,i);
- 	EndogenousStates(dvals);
-
-	//EndogenousStates(nc= new ActionCounter("nc",tau+1,d)); // added total number of kids;
-	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
+	EndogenousStates(dvals);
+	EndogenousStates(nb = new RandomUpDown("nb",tau,ItsABoy)); // number of boys
 	
 	CreateSpaces();
        	DPDebug::outAllV(FALSE,&mat);
@@ -66,8 +65,10 @@ Ahn::Run(){
 	EMax->Solve();
 	EMax.Volume = NOISY;   // trying to get that step-by-step info
 	savemat("v.dta",mat,DPDebug::SVlabels);
+	
+	// Calculate the total probabilities
 	PD = new PanelPrediction(15);
-        PD -> Tracking(NotInData,d,dvals[1]);
+        PD -> Tracking(NotInData,d);
         PD -> Predict(6);
         PD -> Histogram(One);
        // println("%c",PD.tlabels,PD.flat[0]);
