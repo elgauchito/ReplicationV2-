@@ -28,7 +28,7 @@ Ahn::Utility()  {
 	if(nc>0){ // calculate boys girls ratio
 	bg=CV(nb)/nc;
 	}
-	
+	//bg=.5;	
 	// calculate utility
 	for(j=0;j<bound;++j) {
 		decl index=ind[j];
@@ -95,8 +95,4 @@ Ahn::ItsABoy(A) {
 
 }
 
-/*Ahn::ItsABirth(A) {
-	decl birth = A[][d.pos];
-	return  0  ~ 0 ~ 1;
-  
-}*/
+
