@@ -6,7 +6,7 @@ enum{T=25,tau=7};  /** State space dimensions. @names dimens **/
 struct Ahn : ExtremeValue {
 	
 	static decl d, nc, nb, nbp, dvals, EMax, i;	  // list action variables, state variables, other things.
-	static const decl BoyRatio = 0.51, delt=0.95, pho=1;   // ratio of births that are boys
+	static const decl BoyRatio = 0.515, delt=0.95, pho=1;   // ratio of births that are boys (from p.377 1st paragraph)
 	static decl Noff, p ; // placeholders for variables that maynot be needed
 	static const decl
 		/* estimated parameters from Table 5*/ pars ; 
