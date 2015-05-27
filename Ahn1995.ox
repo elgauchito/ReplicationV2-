@@ -1,7 +1,5 @@
 #include "Ahn1995.h"
 
-/** Need to specify the Reachable and  Utility functions**/
-
 
 Ahn::Utility()  {
 	
@@ -35,9 +33,9 @@ Ahn::Utility()  {
 		}	
 
 	u= log(max(1,u+Y[I::t]));
-	u=(u+Y[I::t])/100;	
-	println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
-	println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
+	//u=(u+Y[I::t])/100;	
+	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
+	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
 
 }
@@ -63,9 +61,9 @@ Ahn::Run(){
 	//EMax.vtoler = 1E-1; 
 	EMax->Solve();
 	EMax.Volume = NOISY;   // trying to get that step-by-step info
-	savemat("v.dta",mat,DPDebug::SVlabels);
+	//savemat("v.dta",mat,DPDebug::SVlabels);
 	
-	// Calculate the total probabilities
+	// Calculate the choice probabilities
 	PD = new PanelPrediction(15);
         PD -> Tracking(NotInData,d);
         PD -> Predict(6);
