@@ -7,18 +7,17 @@ Ahn::Utility()  {
 	
 	decl u=0,j , nc=0, ind=zeros(1,7), div, bg=0, age, bound=0 ;
 
-	bound=min(7,I::t+1);
+	bound=min(7,I::t);
 	
-	if (I::t<7){ // caluclate total number of childs, and age index of the child
+	if (I::t<bound){ // caluclate total number of childs, and age index of the child
 		for(j=0;j<bound;++j) nc=nc+CV(dvals[j]);
-		if (I::t > 4) {ind[0]=1;}
-		if (I::t > 5){ ind[0]=1,ind[1]=1;}	
+		if (I::t > 5){ ind[0]=1,ind[1]=0;}	
 	
 	}
 	else {
 		for(j=0;j<bound;++j) {
 			nc=nc+CV(dvals[j]);
-			age=(I::t-j)*2;
+			age=(I::t-j-0.5)*2;
 			div=idiv(age,10); // integer division to get the index
 		 	if (div >2 ) div=3;
 			ind[j]=div;	
@@ -36,9 +35,9 @@ Ahn::Utility()  {
 		}	
 
 	u= log(max(1,u+Y[I::t]));
-	//u=(u+Y[I::t])/100;	
-	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
-	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
+	u=(u+Y[I::t])/100;	
+	println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
+	println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
 
 }
