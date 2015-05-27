@@ -7,20 +7,17 @@ Ahn::Utility()  {
 
 	bound=min(7,I::t);
 	
-	if (I::t<bound){ // caluclate total number of childs, and age index of the child
-		for(j=0;j<bound;++j) nc=nc+CV(dvals[j]);
-		if (I::t > 5){ ind[0]=1,ind[1]=0;}	
-	
-	}
-	else {
-		for(j=0;j<bound;++j) {
+	//calculate total number of children and age index of each births
+	for(j=0;j<bound;++j) { 
 			nc=nc+CV(dvals[j]);
 			age=(I::t-j-0.5)*2;
-			div=idiv(age,10); // integer division to get the index
-		 	if (div >2 ) div=3;
-			ind[j]=div;	
+			if (age>0) {
+				div=idiv(age,10); // integer division to get the index
+		 		if (div >2 ) div=3;
+				ind[j]=div;	
+			}
 		}
-	}
+	
 
 	if(nc>0){ // calculate boys girls ratio
 	bg=CV(nb)/nc;
