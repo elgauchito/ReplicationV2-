@@ -1,13 +1,16 @@
 #include "Ahn1995.h"
 
 
+
+/** This method calculate the current period utility.&nbsp; The main difficulty is the age-dependant value level of the children. **/
+
 Ahn::Utility()  {
 	
 	decl u=0,j , nc=0, ind=zeros(1,7), div, bg=0, age, bound=0 ;
 
 	bound=min(7,I::t);
 	
-	//calculate total number of children and age index of each births
+	//calculate total number of children and age index of each birth
 	for(j=0;j<bound;++j) { 
 			nc=nc+CV(dvals[j]);
 			age=(I::t-j-0.5)*2;
@@ -22,7 +25,7 @@ Ahn::Utility()  {
 	if(nc>0){ // calculate boys girls ratio
 	bg=CV(nb)/nc;
 	}
-	bg=1; // Set bg=1 to set boy and girls value the same, set bg=0.5 to use average.	
+	bg=0.5; // Set bg=1 to set boy and girls value the same, set bg=0.5 to use average.	
 	// calculate utility
 	for(j=0;j<bound;++j) {
 		decl index=ind[j];
@@ -30,7 +33,7 @@ Ahn::Utility()  {
 		}	
 
 	u= log(max(1,u+Y[I::t]));
-	//u=(u+Y[I::t])/100;	
+	
 	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
 	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
@@ -42,7 +45,7 @@ Ahn::Utility()  {
 Ahn::Run(){
 
  	decl mat,PD;	
-	Initialize(pho,Reachable);
+	Initialize(rho,Reachable);
 	SetClock(NormalAging,T);
 	SetDelta(delt);   // set discount factor eqn (12) of Ahn 
 	Actions(d = new BinaryChoice()); // d=1 to have a child
@@ -71,11 +74,13 @@ Ahn::Run(){
 
     }
 
+/** d=1 (decision to have a child) is only allowed for the first 7 periods. **/
 Ahn::FeasibleActions(Alpha) { 
 
 	return 1|(I::t<tau) ;   
 }
 
+/** Function to trim unreacbable states.&nbsp; The number of boys cannot be higher than the number childrens. **/
 Ahn::Reachable(){
 	decl nc=0,j;
 	for(j=0;j<7;++j) nc=nc+CV(dvals[j]);
@@ -84,6 +89,7 @@ Ahn::Reachable(){
 	return new Ahn();
 }
 
+/** Transition function for the state variable nb (number of boys).&nbsp; The transition depends on whether d=1 and the probability that a birth is a boy. **/
 Ahn::ItsABoy(A) {
 	decl birth = A[][d.pos];
 	return  0  ~ (1-birth)+birth*(1-BoyRatio) ~ birth*BoyRatio;
