@@ -2,7 +2,7 @@
 
 
 
-/** This method calculate the current period utility.&nbsp; The main difficulty is the age-dependant value level of the children. **/
+/** This method calculates the current period utility.&nbsp; The main difficulty is the age-dependent value level of the children. **/
 
 Ahn::Utility()  {
 	
@@ -51,7 +51,7 @@ Ahn::Run(){
 	Actions(d = new BinaryChoice()); // d=1 to have a child
 	
 	dvals = new array[7];
-	for(i=0;i<7;++i) dvals[i] = new ChoiceAtTbar("d"+sprint(i),d,i);
+	for(i=0;i<7;++i) dvals[i] = new ChoiceAtTbar("d"+sprint(i),d,i,i);
 	EndogenousStates(dvals);
 	EndogenousStates(nb = new RandomUpDown("nb",tau+1,ItsABoy)); // number of boys
 	
@@ -80,7 +80,7 @@ Ahn::FeasibleActions(Alpha) {
 	return 1|(I::t<tau) ;   
 }
 
-/** Function to trim unreacbable states.&nbsp; The number of boys cannot be higher than the number childrens. **/
+/** Function to trim unreachable states.&nbsp; The number of boys cannot be higher than the number children. **/
 Ahn::Reachable(){
 	decl nc=0,j;
 	for(j=0;j<7;++j) nc=nc+CV(dvals[j]);
