@@ -1,4 +1,4 @@
-#import "DDP"
+
 
 /**  The goal of this project is to replicate some results from the 1995 ReStud paper "Measuring the Value of Children by Sex and Age Using a Dynamic Programming Model" by Namkee Ahn. This paper's main contribution is that it was the first attempt to estimate the "economic value" (in terms of money) of children to their parents using a dynamic discrete choice framework. The basic idea is that the parent faces a known income profile of their life and in each period of their life cycle they receive utility from their income and also from the number of children they have (which is age and gender dependent). Therefore during each fertile period, the parents decide whether to have a child or not by maximising their expected total life cycle utility. The age and gender dependent values of the children are then estimated from fertility data of Korean couples in the 1980s. <br>
 
@@ -38,6 +38,8 @@ As shown in the table above, we cannot replicate the results from Ahn at this mo
 @author Ken Chow, David R. <br>
  
  **/
+
+ #import "DDP"
 
 
 /** T is the total number of living periods, **/
