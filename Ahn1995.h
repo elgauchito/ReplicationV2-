@@ -1,4 +1,4 @@
-
+#import "DDP"
 /**  The goal of this project is to replicate some results from the 1995 ReStud paper "Measuring the Value of Children by Sex and Age Using a Dynamic Programming Model" by Namkee Ahn. This paper's main contribution is that it was the first attempt to estimate the "economic value" (in terms of money) of children to their parents using a dynamic discrete choice framework. The basic idea is that the parent faces a known income profile of their life and in each period of their life cycle they receive utility from their income and also from the number of children they have (which is age and gender dependent). Therefore during each fertile period, the parents decide whether to have a child or not by maximising their expected total life cycle utility. The age and gender dependent values of the children are then estimated from fertility data of Korean couples in the 1980s. <br>
 
 For our project, we use the estimated values of the children from the paper to calcuate the choice probability of giving birth for college educated Korean women using the niqlow DDP solver. More specifically, we aim to replicate the results from panels c and d from table 5b on p. 374 of the paper. Panel c shows the choice probabilities if the boys and girls have the same values. Panel d shows the choice probabilities if the average values of boys and girls are used in the estimation. <br> 
@@ -38,7 +38,6 @@ As shown in the table above, we cannot replicate the results from Ahn at this mo
  
  **/
 
- #import "DDP"
 
 
 /** T is the total number of living periods, **/
