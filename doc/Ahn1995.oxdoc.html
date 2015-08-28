@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="oxdoc.css">
+<link rel="stylesheet" type="text/css" media="print" href="print.css">
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<title>Ahn1995.oxdoc</title>
+</head>
+<body>
+<div class="header">
+[ <img class="icon" src="icons/project_s.png">&nbsp;<a href="default.html">Project home</a>
+ | <img class="icon" src="icons/index_s.png">&nbsp;<a href="index.html">Index</a>
+ | <img class="icon" src="icons/hierarchy_s.png">&nbsp;<a href="hierarchy.html">Class hierarchy</a> ]</div>
+<h1><span class="icon"><img class="icon" src="icons/file.png">&nbsp;</span><span class="text">Ahn1995.oxdoc</span></h1>
+
+Replicate Ahn 1995 output using <span class="n"><a href="../doc/DynamicPrograms/default.html">DDP</a></span>.
+
+
+
+<OL class="contents">
+<LI>Overview</LI>
+<li>Model</li>
+<li>Implementation</li>
+<li>Replication Output</li>
+<li>Remarks</li>
+<P/>
+</OL>
+<P/>
+<OL class="body">
+<a name="O"><LI>Overview</LI></a>
+<P/>
+A major tenant of scientific inquiry is the reproducibility of experimental evidence. With this in mind, we have set out to reproduce some important results from Ahn's 1995 paper titled "Measuring the Value of Children by Sex and Age Using a Dynamic Programming Model."  This paper's main contribution is that it was the first attempt to estimate the "economic value" (in terms of money) of children to their parents using a dynamic discrete choice framework. The basic idea is that the parent faces a known income profile of their life and in each period of their life cycle they receive utility from two sources: their income and the number of children they have (which is age and gender dependent). Therefore during each fertile period, the parents decide whether to have a child or not by maximizing their expected total life cycle utility. 
+
+
+This paper will first outline the main elements Ahn's model and then describe our computational methodology for reproducing panels c and d from Table 5b on p. 374 of the paper. Panel c shows the choice probabilities if the boys and girls have the same values. Panel d shows the choice probabilities if the average values of boys and girls are used in the estimation.
+<P/>
+<a name="M"><LI>The Model</li></a>
+<P/>
+<DT>An example of <code>ExtremeValue</code> class DDP:</DT>
+<DD><span class="expression">\(\zeta \)</span> specification: ex ante additive extreme value errors enter U()</DT>
+<DD>Clock: NormalAging (finite horizon, ends in period T) </DT>
+<DD>Action: <span class="expression">\(\alpha\)</span> = (d), d.N = 2 , the binary decision to have a child or not in a fertile period.</DT>
+<DT>Endogenous State</DT>
+<DD><span class="expression">\(\theta = (nb, dvals[i]) \)</span> , nb.N = 8, dvals[i].N = 2</DD>
+<DD><span class="expression">\(dvals[i]\)</span> is the decision of whether to have a child in period i (where <span class="expression">\(0 \leq i < \tau \)</span>)</DD>
+<DD><span class="expression">\(nb\)</span> is the number of boy children that a woman has.</DD>
+<P/>
+<DT>Transition: </DT>
+<DD>If t is a fertile period (<span class="expression">\( t \leq \tau = 7 \)</span>) then number of boys next period is either 0 or 1 boys more.</DD>
+<DD>nb' = nb + (1-d)*(probability of having a son).</DD>
+<DD>If t is not a fertile period ( <span class="expression">\( \tau < t \)</span>) then nb remains constant.</DD>
+<DD>nb' = nb</DD>
+<P/>
+<DT>Semi-Endogenous: none </DT>
+<P/>
+<DT>Endogenous: none </DT>
+<P/>
+<DT>Utility: </DT>
+<DD>The value of composite good, <span class="expression">\(x_t\)</span>, which is made up of income and the current value of existing boy and girl children (which is not constrained to be the same): <span class="expression">\( U_t = log(Y_t + \sum_{k=0} ^{t-1} (b_{k+1} m^t _{t-k-1} + g_{k+1} f^t _{t-k-1}) + \zeta_t(d_t)\)</span>
+where <span class="expression">\(Y_t\)</span>, denotes the couple's income at <span class="expression">\(t\)</span>, and <span class="expression">\(b_t, (g_t)\)</span> takes a value of one if the couple has a male (female) birth at t and zero otherwise.  Meanwhile, the value of a <span class="expression">\(k\)</span>-period-old boy (girl) at time t is denoted as <span class="expression">\(m^t _k (f^t _k)\)</span>. It is assumed that the couple may have at most one child per period   (p. 336). The error term <span class="expression">\(\zeta_t(d_t)\)</span> is the standard IID extreme value shock. 
+Note: due to the negative values of boys and girls at young ages <span class="expression">\(log(x_t)\)</span> was negative in some cases. To resolve this issue we implemented a minor change to the utility function:
+<span class="expression">\( V_t = max(1, U_t) \)</span> , effectively bounding the utility function above zero.</DD>
+<P/>
+<DT>Parameters: </DT>
+<DD><table><tr><td><span class="expression">\(\delta\)</span></td><td>	0.95</td> </tr>
+<tr><td><span class="expression">\(Y\)</span></td> <td>		<365.11, 406.79, 448.57, 489.56, 528.79;
+     		 565.29, 598.10, 626.29, 649.06, 665.73;
+    		 675.79, 678.94, 675.08, 664.33, 644.92;
+     		 606.82, 552.07, 448.44, 311.77, 164.49; 
+    		 115.41, 112.05, 112.05, 112.05, 112.05> </td> </tr>
+<P/>
+<tr><td><span class="expression">\(m\)</span></td>	<td>	<49.33,-45.61,-196.5, 131.7></td></tr>
+<tr><td><span class="expression">\(f\)</span></td> <td>		<50.35,-33.96,-56.37, 4.77></td></tr>
+</table></DD>
+<DD> Where <span class="expression">\(\delta\)</span> is the discount factor, <span class="expression">\(Y\)</span> is the income for each period as represented by the vector above, <span class="expression">\(m\)</span> and <span class="expression">\(f\)</span> are the economic values of boy and girls for each age bracket respectively. </DD>
+
+
+<a name="I"><li>Implementation in DDP</li></a>
+<DT>Declarations in the Header File</DT>
+<details><summary><a href="../Ahn1995.h">Header File</a></summary>
+<DD><pre><object width="75%" height="200" type="text/plain" data="../Ahn1995.h" border="1" ></object></pre></dd></details>
+<P/>
+<DT>Executable Code in the Ox File</DT>
+<details><summary><a href="../Ahn1995.ox">Ox File</a></summary>
+<dd><pre><object width="75%" height="200" type="text/plain" data="../Ahn1995.ox" border="1" ></object></pre></dd></details>
+
+
+<a name="O"><li>Output</li></a>
+<P/>
+<DD class="example"><pre>       Output produced: <a href="../AhnOut.txt">niqlow/ReplicationV2-/AhnOut.txt</a>
+<object width="75%" height="200" type="text/plain" data="../AhnOut.txt" border="1" ></object></pre></DD>
+<P/>
+<DD>For our project, we use the estimated values of the children from the paper to calculate the choice probability of giving birth for college educated Korean women using the niqlow DDP solver. More specifically, we aim to replicate the results from panels c and d from table 5b on p. 374 of the paper. Panel c shows the choice probabilities if the boys and girls have the same values. Panel d shows the choice probabilities if the average values of boys and girls are used in the estimation. 
+The main reason for choosing these panels is that Ahn's approach requires keeping track of both the ages and gender of the children. To do this in niqlow would require creation of a new derived StateVariable class but other aspects of the original model mean the gap between it and the approximation is small. Instead, niqlow can keep track of the actions taken using the ChoiceAtTbar class and this together with a separate state variable for the number of boys allows us to keep track of the total number of children, the total number of boys and girls and the age of the children (but not the age of each gender) in each period. In the Utility() method, setting the local variable bg=1 will give estimated probabilities for panel c and setting bg=0.5 will give the estimated probabilities for panel d. The actual and estimated probabilities are shown in the following table.</DD>
+<DD>
+ <table border="0">
+  <tr>
+    <th>Period</th><th>Panel c (Actual)</th> <th> Panel c (niqlow)</th> <th>Panel d (Actual)</th><th>Panel d (niqlow)</th>
+  </tr>
+  <tr>
+    <td>0</td><td>1.00</td><td>0.54</td><td>1.00</td><td>0.58</td>
+  </tr>
+  <tr>
+    <td>1</td><td>0.03</td><td>0.41</td><td>0.95</td><td>0.53</td>
+  </tr>
+<tr>
+    <td>2</td><td>0.41</td><td>0.32</td><td>0.53</td><td>0.47</td>
+    </tr>
+<tr>
+    <td>3</td><td>0.13</td><td>0.23</td><td>0.15</td><td>0.40</td>
+  </tr>
+<tr>
+    <td>4</td><td>0.05</td><td>0.13</td><td>0.05</td><td>0.27</td>
+  </tr>
+<tr>
+    <td>5</td><td>0.04</td><td>0.11</td><td>0.01</td><td>0.20</td>
+  </tr>
+  <tr>
+    <td>6</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td>
+  </tr>
+</table> 
+</DD>
+<P/>
+<a name="R"><LI>Remarks</LI></a>
+<DD>As shown in the table above, we cannot replicate the results from Ahn at this moment. We have printed out the decision variables, state variables, income and utility from each period and each reachable state and they seems to have been calculated, so we are uncertain what is causing the discrepancies. One thing that is not clear from the paper is that the utility is the log of the sum of income and number of children which could be negative, so there must be some adjustment made for these states and we are unsure what that is (we set all values below 0 to 1 before taking log).</DD>
+
+<div class="footer">
+Generated by <a href="http://oxdoc.sourceforge.net">oxdoc 1.0alpha</a> &copy Copyright 2005-2012 by Y. Zwols<br>
+Math typesetting by <a href="http://www.mathjax.org/">Mathjax</a>
+</div>
