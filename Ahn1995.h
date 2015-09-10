@@ -1,42 +1,4 @@
 #import "DDP"
-/**  The goal of this project is to replicate some results from the 1995 ReStud paper "Measuring the Value of Children by Sex and Age Using a Dynamic Programming Model" by Namkee Ahn. This paper's main contribution is that it was the first attempt to estimate the "economic value" (in terms of money) of children to their parents using a dynamic discrete choice framework. The basic idea is that the parent faces a known income profile of their life and in each period of their life cycle they receive utility from their income and also from the number of children they have (which is age and gender dependent). Therefore during each fertile period, the parents decide whether to have a child or not by maximising their expected total life cycle utility. The age and gender dependent values of the children are then estimated from fertility data of Korean couples in the 1980s. <br>
-
-For our project, we use the estimated values of the children from the paper to calcuate the choice probability of giving birth for college educated Korean women using the niqlow DDP solver. More specifically, we aim to replicate the results from panels c and d from table 5b on p. 374 of the paper. Panel c shows the choice probabilities if the boys and girls have the same values. Panel d shows the choice probabilities if the average values of boys and girls are used in the estimation. <br> 
-
-The main reason for choosing these panels is that at the current time niqlow does not have the features required to keep track of both the ages and gender of the children. However, niqlow can keep track of the actions taken using the ChoiceAtTbar class and this together with a separate state variable for the number of boys allows us to keep track of the total number of children, the total number of boys and girls and the age of the children (but not the age of each gender) in each period. In the Utility() method, setting the local variable bg=1 will give estimated probabilities for panel c and setting bg=0.5 will give the estimated probabilities for panel d. The actual and estimated probabilities are shown in the following table. <br>
-
- <table border="1">
-  <tr>
-    <th>Period</th><th>Panel c (Actual)</th> <th> Panel c (niqlow)</th> <th>Panel d (Actual)</th><th>Panel d (niqlow)</th>
-  </tr>
-  <tr>
-    <td>0</td><td>1.00</td><td>0.54</td><td>1.00</td><td>0.58</td>
-  </tr>
-  <tr>
-    <td>1</td><td>0.03</td><td>0.41</td><td>0.95</td><td>0.53</td>
-  </tr>
-<tr>
-    <td>2</td><td>0.41</td><td>0.32</td><td>0.53</td><td>0.47</td>
-    </tr>
-<tr>
-    <td>3</td><td>0.13</td><td>0.23</td><td>0.15</td><td>0.40</td>
-  </tr>
-<tr>
-    <td>4</td><td>0.05</td><td>0.13</td><td>0.05</td><td>0.27</td>
-  </tr>
-<tr>
-    <td>5</td><td>0.04</td><td>0.11</td><td>0.01</td><td>0.20</td>
-  </tr>
-  <tr>
-    <td>6</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.00</td>
-  </tr>
-</table> 
-<br>
-As shown in the table above, we cannot replicate the results from Ahn at this moment. We have printed out the decision variables, state variables, income and utility from each period and each reachable state and they seem to have been calculated correctly, so we are uncertain about what is causing the discrepancies. One thing that is not clear from the paper is that the utility is the log of the sum of income and number of children which could be negative, so there must be some adjustment made for these states and we are unsure what that is (we set all values below 0 to 1 before taking the log).
-
-@author Ken Chow, David R. <br>
- 
- **/
 
 
 
