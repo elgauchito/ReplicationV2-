@@ -83,6 +83,18 @@ Note: due to the negative values of boys and girls at young ages <span class="ex
 <DT>Executable Code in the Ox File</DT>
 <details><summary><a href="../Ahn1995.ox">Ox File</a></summary>
 <dd><pre><object width="75%" height="200" type="text/plain" data="../Ahn1995.ox" border="1" ></object></pre></dd></details>
+<P/>
+<a name="R"><LI>Remarks</LI></a>
+<DT><code>Ahn</code> is derived from the <code>ExtremeValue</code> class</DT>
+<DD>The <code>ExtremeValue</code> class specifies that the error term that enters the utility function is of the Type-1 Extreme Value form.</DD>
+<DT><code>Reachable()</code> is called by <code>DP::CreateSpaces</code>() as it generates the state space <code>&Theta;</code>.</DT>
+<DD><code>Reachable()</code> returns a new instance of the <code>Ahn</code> class if it is a feasible state. For this project, the feasible states are simple to specify. There are two requirements that must be satisfied. Since a women can only the conceive a child in the first 7 periods, therefore the total number of child, as recorded by <code>nc</code> variable, must be less than or equal to 7. Since the program also use the number of boy, <code>nb</code>, as an endogenous variable, we naturally also have the requirement that <code>nb</code> <span class="expression">\(\le\)</span> <code>nc</code>. Any states that violate these two requirements are not feasible. </DD>
+<DT><code>Utility()</code> calculate current period utility.</DT>
+<DD>The utility for each period depends the current period income (which is deterministic) and the total number child of each gender (which is stochastic). The utility function access the two endogenous state variables <code>dvals</code>, which record the decisions of whether to have a child or not for the first seven time periods,  and <code>nb</code>, which record the total number of boys. Note that since a decision to have a child will result in certainty in conception, the number of times a women decides to conceive is equal to the number of child the woman have.</DD>
+<P/>
+<DT><code>Run()</code> setup the problem and solve it.</DT>
+<DD>When <code>Run()</code> is called, it first set the <code>clock</code> to a finite horizon normal aging problem. The only decision that a woman makes in the model is whether to have a child or not, therefore the there are only two actions available (0 for no birth, 1 for birth). The endogenous state vector <code>dvals</code> record the actions chosen by the woman in the first 7 periods, since conception is certainty if chosen, summing up the components of <code>dvals</code> also gives the total number of child present. Another important variable is the number of boys, since each child can be of either gender, the total number of boys in each period is a stochastic variable. The transition to the <code>nb</code> variable is handled by the <code>ItsABoy(A)</code> function. Once the problem is setup properly, the solution method is called to solve model. </DD>
+
 
 
 <a name="O"><li>Output</li></a>
@@ -120,8 +132,6 @@ The main reason for choosing these panels is that Ahn's approach requires keepin
   </tr>
 </table> 
 </DD>
-<P/>
-<a name="R"><LI>Remarks</LI></a>
 <DD>As shown in the table above, we cannot replicate the results from Ahn at this moment. We have printed out the decision variables, state variables, income and utility from each period and each reachable state and they seems to have been calculated, so we are uncertain what is causing the discrepancies. One thing that is not clear from the paper is that the utility is the log of the sum of income and number of children which could be negative, so there must be some adjustment made for these states and we are unsure what that is (we set all values below 0 to 1 before taking log).</DD>
 
 <div class="footer">
