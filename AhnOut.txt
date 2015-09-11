@@ -1,0 +1,90 @@
+
+Ox Console version 7.00 (OS_X_64/U) (C) J.A. Doornik, 1994-2013
+This version may be used for academic research and teaching only
+
+ niqlow version 2.20 Copyright (C) 2011-2015 Christopher Ferrall.
+ Execution of niqlow implies acceptance of its free software License (niqlow/niqlow-license.txt).
+-------------------- DP Model Summary ------------------------
+1. CLOCK
+    3. Normal Finite Horizon Aging
+2. STATE VARIABLES
+              |eps   |eta |theta                                                  -clock        |gamma
+              s11    s21     d0     d1     d2     d3     d4     d5     d6     nb      t     t'      r      f
+       s.N      1      1      2      2      2      2      2      2      2      8     25      1      1      1
+
+
+     Transition Categories (not counting placeholders and variables with N=1)
+                 NonRandom       Random   Coevolving    Augmented       Timing    Invariant
+     #Vars               7            1            0            1            0            0
+
+3. SIZE OF SPACES
+
+                       Number of Points
+    Exogenous(Epsilon)                1
+    SemiExogenous(Eta)                1
+     Endogenous(Theta)             1024
+                 Times               25
+         EV()Iterating             1024
+      ChoiceProb.track            25600
+  Random Groups(Gamma)                1
+   Fixed Groups(Gamma)                1
+       Total Untrimmed            25600
+
+4. ACTION VARIABLES
+   Number of Distinct action vectors: 2
+             a
+    a.N      2
+
+
+5. TRIMMING AND SUBSAMPLING OF THE ENDOGENOUS STATE SPACE (Theta)
+                             N
+    TotalReachable       10817
+         Terminal            0
+     Approximated            0
+    tfirsts (t=0..T)         0
+                             2
+                             5
+                            13
+                            33
+                            81
+                           193
+                           449
+                          1025
+                          1601
+                          2177
+                          2753
+                          3329
+                          3905
+                          4481
+                          5057
+                          5633
+                          6209
+                          6785
+                          7361
+                          7937
+                          8513
+                          9089
+                          9665
+                         10241
+                         10817
+
+6. FEASIBLE ACTION SETS
+ 
+    alpha       A[0]     A[1]   
+    -------------------------------
+    (0)           X        X        
+    (1)           X        -        
+   #States      449    10368
+    -------------------------------
+    Key: X = row vector is feasible. - = infeasible
+
+
+       f       t       a
+  0.0000  0.0000  0.5847
+  0.0000  1.0000  0.5281
+  0.0000  2.0000  0.4707
+  0.0000  3.0000  0.3955
+  0.0000  4.0000  0.2715
+  0.0000  5.0000  0.1977
+  0.0000  6.0000  0.0000
+
