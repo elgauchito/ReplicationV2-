@@ -25,7 +25,7 @@ Ahn::Utility()  {
 	if(nc>0){ // calculate boys girls ratio
 	bg=CV(nb)/nc;
 	}
-	bg=0.5; // Set bg=1 to set boy and girls value the same, set bg=0.5 to use average.	
+	bg=1; // Set bg=1 to set boy and girls value the same, set bg=0.5 to use average.	
 	// calculate utility
 	for(j=0;j<bound;++j) {
 		decl index=ind[j];
@@ -34,8 +34,8 @@ Ahn::Utility()  {
 
 	u= log(max(1,u+Y[I::t]));
 	
-	//println(CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
-	//println(ind[0]," ",ind[1]," ",ind[2]," ",ind[3]," ",ind[4]," ",ind[5]," ",ind[6]," nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
+	println("dvals ",CV(dvals[0])," ", CV(dvals[1])," ",CV(dvals[2])," ",CV(dvals[3])," ",CV(dvals[4])," ",CV(dvals[5])," ",CV(dvals[6])," u ", u, " bg ",bg);
+	println(" nb ",CV(nb)," t ",I::t," nc ",nc," "," Y ",Y[I::t]);	
 	return u;	  
 
 }
